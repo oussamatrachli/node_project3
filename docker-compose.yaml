@@ -4,10 +4,10 @@ services:
   nodejs:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: oussamatrachli/node-kubernetes
     image: nodejs
     container_name: nodejs
-    restart: unless-stopped
+    restart: always
     env_file: .env
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
@@ -16,14 +16,9 @@ services:
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB 
     ports:
-      - "80:8080"
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
+      - "8080:8080"
     networks:
       - app-network
-    command: ./wait-for.sh db:27017 -- /home/node/app/node_modules/.bin/nodemon app.js
-
   db:
     image: mongo:4.1.8-xenial
     container_name: db
@@ -43,4 +38,3 @@ networks:
 
 volumes:
   dbdata:
-  node_modules:      
